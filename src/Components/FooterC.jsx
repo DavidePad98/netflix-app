@@ -6,7 +6,7 @@ import "../custom.css";
 
 const FooterC = () => {
   return (
-    <Container className="px-5 pt-5">
+    <Container fluid className="bg-dark px-5 pt-5">
       <Row className="px-5">
         <Col>
           <div className="text-secondary">

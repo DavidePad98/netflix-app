@@ -1,15 +1,15 @@
-import { Component } from "react";
+import { useEffect, useState } from "react";
 import { Col, Container, Row } from "react-bootstrap";
 import "../custom.css";
+import { Link } from "react-router-dom";
 // 663d166a
 
-class MyFilm extends Component {
-  state = {
-    filmsArr: [],
-    hoverInex: null,
-  };
-  films = () => {
-    fetch("http://www.omdbapi.com/?apikey=663d166a&s=" + this.props.filmt)
+const MyFilm = ({ filmt }) => {
+  const [filmsArr, setFilmArr] = useState([]);
+  const [hoverIndex, setHoverIndex] = useState(null);
+
+  const films = () => {
+    fetch("http://www.omdbapi.com/?apikey=663d166a&s=" + filmt)
       .then((response) => {
         if (response.ok) {
           return response.json();
@@ -18,57 +18,60 @@ class MyFilm extends Component {
         }
       })
       .then((data) => {
-        // console.log("data", data);
-        this.setState({
-          filmsArr: data.Search,
-        });
+        setFilmArr(data.Search);
       })
       .catch((err) => {
         console.log(err);
       });
   };
 
-  handleMouseEnter = (index) => {
-    this.setState({ hoverIndex: index });
+  const handleMouseEnter = (index) => {
+    setHoverIndex(index);
   };
 
-  handleMouseLeave = () => {
-    this.setState({ hoverIndex: null });
+  const handleMouseLeave = () => {
+    setHoverIndex(null);
   };
+  useEffect(() => {
+    films();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 
-  componentDidMount() {
-    this.films();
-  }
-  render() {
-    return (
-      <Container fluid className="py-4 px-0">
-        <Row className="g-1 justify-content-center ">
-          {this.state.filmsArr.map((e, index) => {
-            return (
-              <Col
-                xs={12}
-                sm={6}
-                md={4}
-                lg={3}
-                xl={2}
-                xxl={1}
-                key={e.imdbID}
-                onMouseEnter={() => this.handleMouseEnter(index)}
-                onMouseLeave={this.handleMouseLeave}
-                className={`x ${
-                  this.state.hoverIndex === index ? "hovered" : ""
-                }`}
-              >
-                <img src={e.Poster} alt="" className=" w-100 h-100" />
-                {this.state.hoverIndex === index && (
-                  <p className="hover-text text-white">{e.Title}</p>
-                )}
-              </Col>
-            );
-          })}
-        </Row>
-      </Container>
-    );
-  }
-}
+  return (
+    <Container fluid className="py-2 px-5">
+      <Row className="g-4 justify-content-center ">
+        {filmsArr.slice(0, 6).map((e, index) => {
+          return (
+            <Col
+              xs={12}
+              sm={6}
+              md={4}
+              lg={3}
+              xl={2}
+              xxl={2}
+              key={e.imdbID}
+              onMouseEnter={() => handleMouseEnter(index)}
+              onMouseLeave={handleMouseLeave}
+              className={`x ${hoverIndex === index ? "hovered" : ""}`}
+            >
+              <Link to={"/movie-details/" + e.imdbID}>
+                <img
+                  src={e.Poster}
+                  alt="fff"
+                  className={`x w-75 h-100 ${
+                    hoverIndex !== index ? "not-hovered" : ""
+                  }`}
+                />
+                {hoverIndex === index && (
+                  <p className="hover-text fs-3 w-25 text-white">{e.Title}</p>
+                )}{" "}
+              </Link>
+            </Col>
+          );
+        })}
+      </Row>
+    </Container>
+  );
+};
+
 export default MyFilm;
