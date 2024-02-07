@@ -39,6 +39,7 @@ const MyFilm = ({ filmt }) => {
 
   return (
     <Container fluid className="py-2 px-5">
+      <h1 className="text-light">{filmt}</h1>
       <Row className="g-4 justify-content-center ">
         {filmsArr.slice(0, 6).map((e, index) => {
           return (
@@ -48,17 +49,16 @@ const MyFilm = ({ filmt }) => {
               md={4}
               lg={3}
               xl={2}
-              xxl={2}
               key={e.imdbID}
               onMouseEnter={() => handleMouseEnter(index)}
               onMouseLeave={handleMouseLeave}
-              className={`x ${hoverIndex === index ? "hovered" : ""}`}
+              className={`py-4 g x ${hoverIndex === index ? "hovered" : ""}`}
             >
               <Link to={"/movie-details/" + e.imdbID}>
                 <img
                   src={e.Poster}
                   alt="fff"
-                  className={`x w-75 h-100 ${
+                  className={`x w-100 h-100 ${
                     hoverIndex !== index ? "not-hovered" : ""
                   }`}
                 />

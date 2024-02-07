@@ -27,3 +27,6 @@ p {
   z-index: 2;
   transition: 0.3s ease, filter 0.3s ease;
 }
+.g {
+  width: 350px;
+}
